@@ -1,6 +1,9 @@
 mssc-beer-order-service/.git
-mssc-beer-inventory/.git
+mssc-beer-inventory-service/.git
 mssc-beer-service/.git
+mssc-beer-order-service/target
+mssc-beer-inventory-service/target
+mssc-beer-service/target
 
 ######################
 # Project Specific
