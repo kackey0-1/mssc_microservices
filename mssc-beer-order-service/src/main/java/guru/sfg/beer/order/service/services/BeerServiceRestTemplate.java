@@ -3,6 +3,7 @@ package guru.sfg.beer.order.service.services;
 import guru.sfg.beer.order.service.services.model.BeerDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
@@ -19,17 +20,21 @@ import java.util.UUID;
  * Created by k-k on 2020/09/09
  */
 @Slf4j
-@RequiredArgsConstructor
 @ConfigurationProperties(prefix = "sfg.brewery", ignoreUnknownFields = false)
 @Component
 public class BeerServiceRestTemplate implements BeerService {
     
-   private final RestTemplate restTemplate;
+   private RestTemplate restTemplate;
    private final String BEER_ID_PATH = "/api/v1/beer/";
    private final String BEER_UPC_PATH = "/api/v1/beerUpc/";
    
    private String beerServiceHost;
-   
+
+   @Autowired
+   public void setRestTemplate(RestTemplateBuilder builder) {
+      this. restTemplate = builder.build();
+   }
+
    public void setBeerServiceHost(String beerServiceHost){
       this.beerServiceHost = beerServiceHost;
    }
@@ -41,7 +46,7 @@ public class BeerServiceRestTemplate implements BeerService {
    }
 
    @Override
-   public Optional<BeerDto> getBeerById(String upc) {
+   public Optional<BeerDto> getBeerByUpc(String upc) {
       log.debug("Calling Beer Service");
       return Optional.of(restTemplate.getForObject(beerServiceHost + BEER_UPC_PATH + upc, BeerDto.class));
    }

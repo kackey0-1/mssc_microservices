@@ -1,5 +1,6 @@
 package guru.springframework.msscbeerservice.web.controller;
 
+import guru.springframework.msscbeerservice.domain.Beer;
 import guru.springframework.msscbeerservice.services.BeerService;
 import guru.springframework.msscbeerservice.web.model.BeerDto;
 import guru.springframework.msscbeerservice.web.model.BeerPagedList;
@@ -69,11 +70,16 @@ public class BeerController {
     }
 
     @GetMapping("/beerUpc/{upc}")
-    public List<BeerDto> listBeersByUpc(@PathVariable String upc,
+    public BeerDto listBeersByUpc(@PathVariable String upc,
                                         @RequestParam(value = "showInventoryOnHand", required = false) Boolean showInventoryOnHand){
         if(showInventoryOnHand == null){
             showInventoryOnHand = false;
         }
-        return beerService.findBeersByUpc(upc, showInventoryOnHand);
+        List<BeerDto> list = beerService.findBeersByUpc(upc, showInventoryOnHand);
+        if(list.size() > 0) {
+            return list.get(0);
+        } else {
+            throw new NotFoundException();
+        }
     }
 }
